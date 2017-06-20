@@ -15,7 +15,6 @@
  * @uses reborn_header_style()
  */
 function reborn_custom_header_setup() {
-
 	/**
 	 * Filter Reborn custom-header support arguments.
 	 *

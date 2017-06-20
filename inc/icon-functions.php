@@ -150,7 +150,7 @@ add_filter( 'walker_nav_menu_start_el', 'reborn_nav_menu_social_icons', 10, 4 );
  * @return string $title The menu item's title with dropdown icon.
  */
 function reborn_dropdown_icon_to_menu_link( $title, $item, $args, $depth ) {
-	if ( 'top' === $args->theme_location ) {
+	if ( 'primary' === $args->theme_location ) {
 		foreach ( $item->classes as $value ) {
 			if ( 'menu-item-has-children' === $value || 'page_item_has_children' === $value ) {
 				$title = $title . reborn_get_svg( array( 'icon' => 'angle-down' ) );

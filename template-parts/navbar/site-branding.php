@@ -8,7 +8,7 @@
  * @version 1.0
  */
 
-?>
+/*
 <div class="site-branding">
 	<div class="wrap">
 
@@ -30,9 +30,22 @@
 			<?php endif; ?>
 		</div><!-- .site-branding-text -->
 
-		<?php if ( ( reborn_is_frontpage() || ( is_home() && is_front_page() ) ) && ! has_nav_menu( 'top' ) ) : ?>
+		<?php if ( ( reborn_is_frontpage() || ( is_home() && is_front_page() ) ) && ! has_nav_menu( 'primary' ) ) : ?>
 		<a href="#content" class="menu-scroll-down"><?php echo reborn_get_svg( array( 'icon' => 'arrow-right' ) ); ?><span class="screen-reader-text"><?php _e( 'Scroll down to content', 'reborn' ); ?></span></a>
 	<?php endif; ?>
 
 	</div><!-- .wrap -->
 </div><!-- .site-branding -->
+ */
+?>
+<?php if ( is_front_page() ) : ?>
+<h1>
+	<a class="navbar-brand icon-logo" href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home">
+		<span class="sr-only"><?php bloginfo( 'name' ); ?></span>
+	</a>
+</h1>
+<?php else : ?>
+<a class="navbar-brand icon-logo" href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home">
+	<span class="sr-only"><?php bloginfo( 'name' ); ?></span>
+</a>
+<?php endif; ?>

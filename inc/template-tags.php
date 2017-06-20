@@ -33,10 +33,11 @@ if ( ! function_exists( 'reborn_time_link' ) ) :
  * Gets a nicely formatted string for the published date.
  */
 function reborn_time_link() {
-	$time_string = '<time class="entry-date published updated" datetime="%1$s">%2$s</time>';
-	if ( get_the_time( 'U' ) !== get_the_modified_time( 'U' ) ) {
-		$time_string = '<time class="entry-date published" datetime="%1$s">%2$s</time><time class="updated" datetime="%3$s">%4$s</time>';
-	}
+	// $time_string = '<time class="entry-date published updated" datetime="%1$s">%2$s</time>';
+	// if ( get_the_time( 'U' ) !== get_the_modified_time( 'U' ) ) {
+	// 	$time_string = '<time class="entry-date published" datetime="%1$s">%2$s</time><time class="updated" datetime="%3$s">%4$s</time>';
+	// }
+	$time_string = '<time class="published" datetime="%1$s" pubdate>%2$s</time><time class="updated sr-only" datetime="%3$s">%4$s</time>';
 
 	$time_string = sprintf( $time_string,
 		get_the_date( DATE_W3C ),
@@ -48,8 +49,8 @@ function reborn_time_link() {
 	// Wrap the time string in a link, and preface it with 'Posted on'.
 	return sprintf(
 		/* translators: %s: post date */
-		__( '<span class="screen-reader-text">Posted on</span> %s', 'reborn' ),
-		'<a href="' . esc_url( get_permalink() ) . '" rel="bookmark">' . $time_string . '</a>'
+		__( '<span class="sr-only">Posted on</span> %s', 'reborn' ),
+		'<a class="icon-calender" href="' . esc_url( get_permalink() ) . '" rel="bookmark">' . $time_string . '</a>'
 	);
 }
 endif;
@@ -81,11 +82,11 @@ function reborn_entry_footer() {
 
 						// Make sure there's more than one category before displaying.
 						if ( $categories_list && reborn_categorized_blog() ) {
-							echo '<span class="cat-links">' . reborn_get_svg( array( 'icon' => 'folder-open' ) ) . '<span class="screen-reader-text">' . __( 'Categories', 'reborn' ) . '</span>' . $categories_list . '</span>';
+							echo '<span class="cat-links">' . reborn_get_svg( array( 'icon' => 'folder-open' ) ) . '<span class="sr-only">' . __( 'Categories', 'reborn' ) . '</span>' . $categories_list . '</span>';
 						}
 
 						if ( $tags_list ) {
-							echo '<span class="tags-links">' . reborn_get_svg( array( 'icon' => 'hashtag' ) ) . '<span class="screen-reader-text">' . __( 'Tags', 'reborn' ) . '</span>' . $tags_list . '</span>';
+							echo '<span class="tags-links">' . reborn_get_svg( array( 'icon' => 'hashtag' ) ) . '<span class="sr-only">' . __( 'Tags', 'reborn' ) . '</span>' . $tags_list . '</span>';
 						}
 
 					echo '</span>';
@@ -113,7 +114,7 @@ function reborn_edit_link() {
 	edit_post_link(
 		sprintf(
 			/* translators: %s: Name of current post */
-			__( 'Edit<span class="screen-reader-text"> "%s"</span>', 'reborn' ),
+			__( 'Edit<span class="sr-only"> "%s"</span>', 'reborn' ),
 			get_the_title()
 		),
 		'<span class="edit-link">',

@@ -11,6 +11,8 @@
 
 /**
  * Reborn only works in WordPress 4.7 or later.
+ *
+ * 确保 WordPress 版本高于 4.7
  */
 if ( version_compare( $GLOBALS['wp_version'], '4.7-alpha', '<' ) ) {
 	require get_template_directory() . '/inc/back-compat.php';
@@ -23,17 +25,28 @@ if ( version_compare( $GLOBALS['wp_version'], '4.7-alpha', '<' ) ) {
  * Note that this function is hooked into the after_setup_theme hook, which
  * runs before the init hook. The init hook is too late for some features, such
  * as indicating support for post thumbnails.
+ *
+ * 设置主题的各项默认值以及注册器，从而支持各种 WordPress 功能
+ *
+ * @link https://developer.wordpress.org/reference/functions/add_theme_support/
+ * @link https://codex.wordpress.org/Theme_Features
  */
 function reborn_setup() {
 	/*
 	 * Make theme available for translation.
-	 * Translations can be filed at WordPress.org. See: https://translate.wordpress.org/projects/wp-themes/reborn
+	 * Translations can be filed at WordPress.org. See: https://translate.wordpress.org/projects/wp-themes/twentyseventeen
 	 * If you're building a theme based on Reborn, use a find and replace
 	 * to change 'reborn' to the name of your theme in all the template files.
+	 *
+	 * 加载多语言包
 	 */
 	load_theme_textdomain( 'reborn', get_template_directory() . '/languages' );
 
-	// Add default posts and comments RSS feed links to head.
+	/**
+	 * Add default posts and comments RSS feed links to head.
+	 *
+	 * 增加 RSS feed link 功能
+	 */
 	add_theme_support( 'automatic-feed-links' );
 
 	/*
@@ -41,6 +54,8 @@ function reborn_setup() {
 	 * By adding theme support, we declare that this theme does not use a
 	 * hard-coded <title> tag in the document head, and expect WordPress to
 	 * provide it for us.
+	 *
+	 * 增加 title 标签功能
 	 */
 	add_theme_support( 'title-tag' );
 
@@ -48,215 +63,81 @@ function reborn_setup() {
 	 * Enable support for Post Thumbnails on posts and pages.
 	 *
 	 * @link https://developer.wordpress.org/themes/functionality/featured-images-post-thumbnails/
+	 *
+	 * 启用发表物和页面的特色图像功能
 	 */
 	add_theme_support( 'post-thumbnails' );
 
+	/**
+	 * 设置支持的特色图像尺寸
+	 * @link https://developer.wordpress.org/reference/functions/set_post_thumbnail_size/
+	 */
 	add_image_size( 'reborn-featured-image', 2000, 1200, true );
+	// add_image_size( 'reborn-thumbnail-avatar', 100, 100, true );
 
-	add_image_size( 'reborn-thumbnail-avatar', 100, 100, true );
-
-	// Set the default content width.
-	$GLOBALS['content_width'] = 525;
-
-	// This theme uses wp_nav_menu() in two locations.
+	/**
+	 * This theme uses wp_nav_menu() in two locations.
+	 *
+	 * 注册导航菜单
+	 */
 	register_nav_menus( array(
-		'top'    => __( 'Top Menu', 'reborn' ),
-		'social' => __( 'Social Links Menu', 'reborn' ),
+		'primary'   => __( 'Primary Menu', 'reborn' ),
+		'social' 		=> __( 'Social Links Menu', 'reborn' ),
+		'friendly' 	=> __( 'Friendly Links Menu', 'reborn' ),
 	) );
 
 	/*
-	 * Switch default core markup for search form, comment form, and comments
-	 * to output valid HTML5.
+	 * Switch default core markup for search form, comment form, and comments to output valid HTML5.
+	 *
+	 * 将内置标记切换为 HTML5 模式
 	 */
 	add_theme_support( 'html5', array(
-		'comment-form',
-		'comment-list',
-		'gallery',
-		'caption',
+		'search-form', 'comment-form', 'comment-list', 'gallery', 'caption'
 	) );
 
 	/*
 	 * Enable support for Post Formats.
 	 *
 	 * See: https://codex.wordpress.org/Post_Formats
+	 *
+	 * 设置受支持的内容形式
 	 */
 	add_theme_support( 'post-formats', array(
-		'aside',
-		'image',
-		'video',
-		'quote',
-		'link',
-		'gallery',
-		'audio',
+		'aside', 'image', 'video', 'quote', 'link', 'gallery', 'status', 'audio', 'chat'
 	) );
 
-	// Add theme support for Custom Logo.
+	/**
+	 * Add theme support for Custom Logo.
+	 *
+	 * 支持自定义 Logo
+	 */
 	add_theme_support( 'custom-logo', array(
-		'width'       => 250,
+		'width'       => 40,
 		'height'      => 250,
 		'flex-width'  => true,
 	) );
 
-	// Add theme support for selective refresh for widgets.
+	/**
+	 * Add theme support for selective refresh for widgets.
+	 *
+	 * 支持挂件选择性刷新
+	 */
 	add_theme_support( 'customize-selective-refresh-widgets' );
 
 	/*
 	 * This theme styles the visual editor to resemble the theme style,
 	 * specifically font, colors, and column width.
+	 *
+	 * 添加文本编辑器中的文本样式
  	 */
 	add_editor_style( array( 'assets/css/editor-style.css', reborn_fonts_url() ) );
-
-	// Define and register starter content to showcase the theme on new sites.
-	$starter_content = array(
-		'widgets' => array(
-			// Place three core-defined widgets in the sidebar area.
-			'sidebar-1' => array(
-				'text_business_info',
-				'search',
-				'text_about',
-			),
-
-			// Add the core-defined business info widget to the footer 1 area.
-			'sidebar-2' => array(
-				'text_business_info',
-			),
-
-			// Put two core-defined widgets in the footer 2 area.
-			'sidebar-3' => array(
-				'text_about',
-				'search',
-			),
-		),
-
-		// Specify the core-defined pages to create and add custom thumbnails to some of them.
-		'posts' => array(
-			'home',
-			'about' => array(
-				'thumbnail' => '{{image-sandwich}}',
-			),
-			'contact' => array(
-				'thumbnail' => '{{image-espresso}}',
-			),
-			'blog' => array(
-				'thumbnail' => '{{image-coffee}}',
-			),
-			'homepage-section' => array(
-				'thumbnail' => '{{image-espresso}}',
-			),
-		),
-
-		// Create the custom image attachments used as post thumbnails for pages.
-		'attachments' => array(
-			'image-espresso' => array(
-				'post_title' => _x( 'Espresso', 'Theme starter content', 'reborn' ),
-				'file' => 'assets/img/espresso.jpg', // URL relative to the template directory.
-			),
-			'image-sandwich' => array(
-				'post_title' => _x( 'Sandwich', 'Theme starter content', 'reborn' ),
-				'file' => 'assets/img/sandwich.jpg',
-			),
-			'image-coffee' => array(
-				'post_title' => _x( 'Coffee', 'Theme starter content', 'reborn' ),
-				'file' => 'assets/img/coffee.jpg',
-			),
-		),
-
-		// Default to a static front page and assign the front and posts pages.
-		'options' => array(
-			'show_on_front' => 'page',
-			'page_on_front' => '{{home}}',
-			'page_for_posts' => '{{blog}}',
-		),
-
-		// Set the front page section theme mods to the IDs of the core-registered pages.
-		'theme_mods' => array(
-			'panel_1' => '{{homepage-section}}',
-			'panel_2' => '{{about}}',
-			'panel_3' => '{{blog}}',
-			'panel_4' => '{{contact}}',
-		),
-
-		// Set up nav menus for each of the two areas registered in the theme.
-		'nav_menus' => array(
-			// Assign a menu to the "top" location.
-			'top' => array(
-				'name' => __( 'Top Menu', 'reborn' ),
-				'items' => array(
-					'link_home', // Note that the core "home" page is actually a link in case a static front page is not used.
-					'page_about',
-					'page_blog',
-					'page_contact',
-				),
-			),
-
-			// Assign a menu to the "social" location.
-			'social' => array(
-				'name' => __( 'Social Links Menu', 'reborn' ),
-				'items' => array(
-					'link_yelp',
-					'link_facebook',
-					'link_twitter',
-					'link_instagram',
-					'link_email',
-				),
-			),
-		),
-	);
-
-	/**
-	 * Filters Reborn array of starter content.
-	 *
-	 * @since Reborn 1.1
-	 *
-	 * @param array $starter_content Array of starter content.
-	 */
-	$starter_content = apply_filters( 'reborn_starter_content', $starter_content );
-
-	add_theme_support( 'starter-content', $starter_content );
 }
 add_action( 'after_setup_theme', 'reborn_setup' );
 
 /**
- * Set the content width in pixels, based on the theme's design and stylesheet.
- *
- * Priority 0 to make it available to lower priority callbacks.
- *
- * @global int $content_width
- */
-function reborn_content_width() {
-
-	$content_width = $GLOBALS['content_width'];
-
-	// Get layout.
-	$page_layout = get_theme_mod( 'page_layout' );
-
-	// Check if layout is one column.
-	if ( 'one-column' === $page_layout ) {
-		if ( reborn_is_frontpage() ) {
-			$content_width = 644;
-		} elseif ( is_page() ) {
-			$content_width = 740;
-		}
-	}
-
-	// Check if is single post and there is no sidebar.
-	if ( is_single() && ! is_active_sidebar( 'sidebar-1' ) ) {
-		$content_width = 740;
-	}
-
-	/**
-	 * Filter Reborn content width of the theme.
-	 *
-	 * @since Reborn 1.0
-	 *
-	 * @param int $content_width Content width in pixels.
-	 */
-	$GLOBALS['content_width'] = apply_filters( 'reborn_content_width', $content_width );
-}
-add_action( 'template_redirect', 'reborn_content_width', 0 );
-
-/**
  * Register custom fonts.
+ *
+ * 注册自定义字体
  */
 function reborn_fonts_url() {
 	$fonts_url = '';
@@ -287,6 +168,8 @@ function reborn_fonts_url() {
 /**
  * Add preconnect for Google Fonts.
  *
+ * 添加 Google Font 预加载
+ *
  * @since Reborn 1.0
  *
  * @param array  $urls           URLs to print for resource hints.
@@ -300,48 +183,9 @@ function reborn_resource_hints( $urls, $relation_type ) {
 			'crossorigin',
 		);
 	}
-
 	return $urls;
 }
 add_filter( 'wp_resource_hints', 'reborn_resource_hints', 10, 2 );
-
-/**
- * Register widget area.
- *
- * @link https://developer.wordpress.org/themes/functionality/sidebars/#registering-a-sidebar
- */
-function reborn_widgets_init() {
-	register_sidebar( array(
-		'name'          => __( 'Blog Sidebar', 'reborn' ),
-		'id'            => 'sidebar-1',
-		'description'   => __( 'Add widgets here to appear in your sidebar on blog posts and archive pages.', 'reborn' ),
-		'before_widget' => '<section id="%1$s" class="widget %2$s">',
-		'after_widget'  => '</section>',
-		'before_title'  => '<h2 class="widget-title">',
-		'after_title'   => '</h2>',
-	) );
-
-	register_sidebar( array(
-		'name'          => __( 'Footer 1', 'reborn' ),
-		'id'            => 'sidebar-2',
-		'description'   => __( 'Add widgets here to appear in your footer.', 'reborn' ),
-		'before_widget' => '<section id="%1$s" class="widget %2$s">',
-		'after_widget'  => '</section>',
-		'before_title'  => '<h2 class="widget-title">',
-		'after_title'   => '</h2>',
-	) );
-
-	register_sidebar( array(
-		'name'          => __( 'Footer 2', 'reborn' ),
-		'id'            => 'sidebar-3',
-		'description'   => __( 'Add widgets here to appear in your footer.', 'reborn' ),
-		'before_widget' => '<section id="%1$s" class="widget %2$s">',
-		'after_widget'  => '</section>',
-		'before_title'  => '<h2 class="widget-title">',
-		'after_title'   => '</h2>',
-	) );
-}
-add_action( 'widgets_init', 'reborn_widgets_init' );
 
 /**
  * Replaces "[...]" (appended to automatically generated excerpts) with ... and
@@ -440,7 +284,7 @@ function reborn_scripts() {
 		'quote'          => reborn_get_svg( array( 'icon' => 'quote-right' ) ),
 	);
 
-	if ( has_nav_menu( 'top' ) ) {
+	if ( has_nav_menu( 'primary' ) ) {
 		wp_enqueue_script( 'reborn-navigation', get_theme_file_uri( '/assets/js/navigation.js' ), array( 'jquery' ), '1.0', true );
 		$reborn_l10n['expand']         = __( 'Expand child menu', 'reborn' );
 		$reborn_l10n['collapse']       = __( 'Collapse child menu', 'reborn' );
@@ -506,8 +350,7 @@ function reborn_header_image_tag( $html, $header, $attr ) {
 add_filter( 'get_header_image_tag', 'reborn_header_image_tag', 10, 3 );
 
 /**
- * Add custom image sizes attribute to enhance responsive image functionality
- * for post thumbnails.
+ * Add custom image sizes attribute to enhance responsive image functionality for post thumbnails.
  *
  * @since Reborn 1.0
  *
@@ -542,9 +385,24 @@ function reborn_front_page_template( $template ) {
 add_filter( 'frontpage_template',  'reborn_front_page_template' );
 
 /**
+ * Implement the Starter content feature.
+ */
+require get_parent_theme_file_path( '/inc/starter-content.php' );
+
+/**
  * Implement the Custom Header feature.
  */
 require get_parent_theme_file_path( '/inc/custom-header.php' );
+
+/**
+ * Set content width.
+ */
+require get_parent_theme_file_path( '/inc/content-width.php' );
+
+/**
+ * Register widget area.
+ */
+require get_parent_theme_file_path( '/inc/widgets.php' );
 
 /**
  * Custom template tags for this theme.

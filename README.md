@@ -1,22 +1,7 @@
 # reborn
 
-<!-- ## is_front_page
+https://codex.wordpress.org/Version_4.7
 
-- 当前访问首页
-- 首页展示最新文章或者一个具体的页面
-
-## is_home
-
-- 当前展示首页
-- 首页展示最新文章（blog） -->
-
-## is_front_page
-
-- 最新文章
-- 静态页面（必须指定具体的页面）
-  + 如果没选择具体页面默认显示最新文章，但是 is_front_page 返回 false
-
-## is_home
-
-- 当前展示首页
-- 首页展示最新文章（blog）
+1. 拷贝 reborn 到目录
+2. 替换 名称
+3. 拷贝 静态资源
